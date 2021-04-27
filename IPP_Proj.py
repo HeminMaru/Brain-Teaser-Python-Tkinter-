@@ -9,6 +9,7 @@ window.title("Brain Teaser")
 window.resizable(0, 0)
 
 
+
 def play(audio):  # function to play audio
     sound = gTTS(audio)
     sound.save('sound.mp3')
@@ -30,20 +31,26 @@ class IPP:
         self.anspos = 0  # answer index position
         self.score = 0  # Score Counter
         self.progress = 0  # progress counter
+        self.operations = ["+", "-", "x"]
 
     def newQues(self):  # making new question and printing in gui
         a = random.randint(0, 100)  # Two random numbers for question
         b = random.randint(0, 100)
-        ans = a + b  # answer
+        operation = random.choice(self.operations)
+        if operation == "+": ans = a + b  # answer
+        elif operation == "-": ans = a-b
+        elif operation == "x": ans = a*b
         for j in range(4):  # storing random numbers in options
-            option[j].set(random.randint(0, 200))
+            option[j].set(random.randint(-200, 200))
             while option[j] == ans:
-                option[j].set(random.randint(0, 200))
+                option[j].set(random.randint(-200, 200))
         self.anspos = random.randint(0, 3)  # getting random position for printing answer
         option[self.anspos].set(ans)  # storing ans to that position
-        quest.set((a, "+", b, "?"))  # setting q in gui
+        quest.set((a, operation, b, "?"))  # setting q in gui
         window.update()  # updating windows
-        play(str((a, "+", b)))  # playing question
+        if operation == "+" : play(str((a, "+", b)))  # playing question
+        elif operation == "-" : play(str((a, "minus", b)))
+        elif operation == "x" : play(str((a, "multiplied by", b)))
 
     def isCorrect(self, n):  # checking whether option clicked is correct or not and updating info
         if n == self.anspos:
@@ -64,7 +71,6 @@ class IPP:
             Home.grid(row="1", column="1", pady="10")  # setting Widgets in gui.
             window.update()
             play(str(("Congratulations", self.name, ", Your Score is", self.score, "out of 10.")))  # playing result
-
     def update(self):  # updating progress and score.
         scorestr.set(("Score", ":", self.score, "/", "10"))
         progstr.set(("Progress", ":", p.progress, "/", "10"))
@@ -72,7 +78,6 @@ class IPP:
     def start(self):  # setting up start widgets and removing unnecessary widgets
         self.name = Name.get("1.0", 'end-1c')
         if self.name == "":
-            homeScreen()
             play("Please enter Your Name")
             return 0
         instruction.grid_forget(), start.grid_forget(), welcome.grid_forget()
@@ -103,7 +108,7 @@ welcome = tkinter.Label(window, width="22", text="Welcome to Brain Teaser!", fon
 enterName = tkinter.Label(window, width="14", text="Enter Your Name :", font=("montserrat", 25))
 Name = tkinter.Text(window, width="8", height="1", font=("montserrat", 32))
 instruction = tkinter.Button(window, width="24", text="INSTRUCTIONS", highlightbackground="peach puff",
-                             font=("montserrat", 28), command=lambda: play("Enter Your Instructions Here"))
+                             font=("montserrat", 28), command=lambda: play("this is your instruction 1  this is your instruction 2"))
 start = tkinter.Button(window, width="24", text="START", highlightbackground="peach puff", font=("montserrat", 28),
                        command=lambda: p.start())
 Prog = tkinter.Label(window, width="15", textvariable=progstr, font=("montserrat", 22), fg="white", bg="purple3")
