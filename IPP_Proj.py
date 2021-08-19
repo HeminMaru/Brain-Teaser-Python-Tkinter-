@@ -5,7 +5,7 @@ from gtts import gTTS
 
 window = tkinter.Tk()
 window.geometry("488x250")
-window.title("Brain Teaser")
+window.title("Brain Haemorrhage")
 window.resizable(0, 0)
 
 
